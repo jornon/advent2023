@@ -11,8 +11,38 @@ import (
 func main() {
 	data, _ := os.ReadFile("4/input")
 	lines := bytes.Split(data, []byte("\n"))
-
+	a(lines)
 	b(lines)
+}
+
+func a(lines [][]byte) {
+	spaceReg, _ := regexp.Compile(" +")
+	result := 0
+	for _, line := range lines {
+		points := 0
+		data := bytes.Split(line, []byte(":"))[1]
+		parts := bytes.Split(data, []byte("|"))
+
+		winners := spaceReg.Split(string(parts[0]), -1)
+		numbers := spaceReg.Split(string(parts[1]), -1)
+
+		for _, winner := range winners {
+			if winner == "" {
+				continue
+			}
+			for _, number := range numbers {
+				if winner == number {
+					if points == 0 {
+						points = 1
+					} else {
+						points *= 2
+					}
+				}
+			}
+		}
+		result += points
+	}
+	println(result)
 }
 
 func b(lines [][]byte) {
